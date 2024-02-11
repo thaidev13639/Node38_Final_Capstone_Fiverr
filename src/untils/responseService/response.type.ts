@@ -1,8 +1,14 @@
 import { Response } from 'express';
+import { IResponseData, IResponseMess } from './response.dto';
 
-const resSuccess200Data = (res: Response, message: string, data: any): void => {
-  let dataSuccess = {
-    statusCode: 200,
+const resSuccessData = (
+  res: Response,
+  statusCode: number,
+  message: string,
+  data: any,
+): void => {
+  let dataSuccess: IResponseData = {
+    statusCode,
     message,
     content: data,
     date: new Date(),
@@ -15,7 +21,7 @@ const resSuccessMess = (
   statusCode: number,
   message: string,
 ): void => {
-  let dataSuccess = {
+  let dataSuccess: IResponseMess = {
     statusCode,
     message,
     date: new Date(),
@@ -24,7 +30,7 @@ const resSuccessMess = (
 };
 
 const resError = (res: Response, statusCode: number, message: string): void => {
-  let dataError = {
+  let dataError: IResponseMess = {
     statusCode,
     message,
     date: new Date(),
@@ -32,4 +38,4 @@ const resError = (res: Response, statusCode: number, message: string): void => {
   res.status(dataError.statusCode).json(dataError);
 };
 
-export { resSuccess200Data, resSuccessMess, resError };
+export { resSuccessData, resSuccessMess, resError };
