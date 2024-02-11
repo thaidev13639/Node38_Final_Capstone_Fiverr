@@ -1,0 +1,185 @@
+-- -- Clear Table
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- DROP TABLE IF EXISTS comments;
+-- DROP TABLE IF EXISTS rent_job;
+-- DROP TABLE IF EXISTS jobs;
+-- DROP TABLE IF EXISTS group_type_jobs;
+-- DROP TABLE IF EXISTS type_jobs;
+-- DROP TABLE IF EXISTS users;
+-- SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+CREATE TABLE users (
+	id int PRIMARY KEY auto_increment,
+	name VARCHAR(100) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	pass_word VARCHAR(255) NOT NULL,
+	phone VARCHAR(255) NOT NULL,
+	birth_day VARCHAR(255) NOT NULL,
+	gender VARCHAR(255) NOT NULL,
+	role VARCHAR(100) NOT NULL,
+	skill VARCHAR(255),
+	certification VARCHAR(255)
+)
+
+INSERT INTO users (name, email, pass_word, phone, birth_day, gender, role, skill, certification) VALUES
+('John Doe', 'john@example.com', 'password123', '123456789', '1990-05-15', 'Male', 'Admin', 'Java, Python', 'Certified Java Developer'),
+('Alice Smith', 'alice@example.com', 'abc123', '987654321', '1988-10-22', 'Female', 'User', 'JavaScript, HTML, CSS', 'Web Developer'),
+('Bob Johnson', 'bob@example.com', 'test123', '456789123', '1995-02-28', 'Male', 'User', 'C++, Java', NULL),
+('Emma Brown', 'emma@example.com', 'pass1234', '321654987', '1993-07-12', 'Female', 'Admin', 'Python, SQL', 'Certified Python Developer'),
+('Michael Wilson', 'michael@example.com', 'password', '789654123', '1985-12-05', 'Male', 'User', 'HTML, CSS', NULL),
+('Sophia Lee', 'sophia@example.com', '123456', '159753258', '1998-03-20', 'Female', 'User', 'C#, JavaScript', NULL);
+
+
+CREATE TABLE type_jobs (
+	id int PRIMARY KEY auto_increment,
+	name_type VARCHAR(255) NOT NULL,
+	user_id int,
+	FOREIGN KEY(user_id) REFERENCES users(id) on DELETE CASCADE
+)
+
+INSERT INTO type_jobs (name_type, user_id) VALUES
+('Software Developer', 1),
+('Web Designer', 1),
+('Database Administrator', 1),
+('Network Engineer', 4),
+('Data Analyst', 4),
+('Project Manager', 4),
+('Software Tester', 1),
+('UI/UX Designer', 1),
+('Systems Analyst', 4);
+
+
+CREATE TABLE group_type_jobs (
+	id int auto_increment,
+	name_group_job VARCHAR(255) NOT NULL,
+	image VARCHAR(255) NOT NULL,
+	code_group_job int UNIQUE,
+	PRIMARY KEY (id, code_group_job),
+	group_job_id int,
+	FOREIGN KEY (group_job_id) REFERENCES type_jobs(id) on DELETE CASCADE,
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES users(id) on DELETE CASCADE,
+	INDEX idx_code_group_job (code_group_job)
+) 
+
+INSERT INTO group_type_jobs (name_group_job, image, code_group_job, group_job_id, user_id) VALUES
+('Full Stack Developer', 'full_stack.jpg', 11, 1, 1),
+('Front-end Developer', 'frontend.jpg', 12, 1, 1),
+('Back-end Developer', 'backend.jpg', 13, 1, 1),
+('UI/UX Designer', 'ui_ux.jpg', 14, 2, 1),
+('Database Administrator', 'db_admin.jpg', 15, 2, 1),
+('Network Engineer', 'network_eng.jpg', 16, 2, 1),
+('Data Analyst', 'data_analyst.jpg', 17, 3, 1),
+('Software Tester', 'tester.jpg', 18, 3, 1),
+('Project Manager', 'project_mgr.jpg', 19, 3, 1),
+('Mobile App Developer', 'mobile_dev.jpg', 20, 4, 4),
+('Security Analyst', 'security_analyst.jpg', 21, 4, 4),
+('Systems Analyst', 'systems_analyst.jpg', 22, 4, 4),
+('Web Designer', 'web_designer.jpg', 23, 5, 4),
+('DevOps Engineer', 'devops_eng.jpg', 24, 5, 4),
+('Quality Assurance Engineer', 'qa_eng.jpg', 25, 5, 4),
+('Software Developer', 'software_dev.jpg', 26, 6, 4),
+('UI/UX Designer', 'ui_ux_2.jpg', 27, 6, 4),
+('Database Administrator', 'db_admin_2.jpg', 28, 6, 4),
+('Network Engineer', 'network_eng_2.jpg', 29, 7, 4),
+('Data Analyst', 'data_analyst_2.jpg', 30, 7, 4);
+
+
+CREATE TABLE jobs (
+	id int auto_increment,
+	name_job VARCHAR(255) NOT NULL,
+	rating int NOT NULL,
+	price int NOT NULL,
+	image VARCHAR(255) NOT NULL,
+	decription VARCHAR(255) NOT NULL,
+	short_decription VARCHAR(255) NOT NULL,
+	star_job int NOT NULL,
+	code_job int UNIQUE,
+	PRIMARY KEY (id, code_job),
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES users(id) on DELETE CASCADE,
+	code_group_job int,
+	FOREIGN KEY (code_group_job) REFERENCES group_type_jobs(code_group_job) on DELETE CASCADE,
+	INDEX idx_code_job (code_job)
+)
+
+INSERT INTO jobs (name_job, rating, price, image, decription, short_decription, star_job, code_job, user_id, code_group_job) VALUES
+('Software Engineer', 20, 1000, 'software_engineer.jpg', 'This is a description for Software Engineer job.', 'Software Engineer', 5, 100, 1, 11),
+('Web Developer', 19, 1200, 'web_dev.jpg', 'This is a description for Web Developer job.', 'Web Developer', 4, 101, 1, 12),
+('Database Analyst', 18, 1500, 'db_analyst.jpg', 'This is a description for Database Analyst job.', 'Database Analyst', 3, 102, 1, 13),
+('Network Administrator', 17, 1100, 'network_admin.jpg', 'This is a description for Network Administrator job.', 'Network Administrator', 5, 103, 1, 14),
+('UI/UX Designer', 16, 1000, 'ui_ux_designer.jpg', 'This is a description for UI/UX Designer job.', 'UI/UX Designer', 4, 104, 1, 15),
+('Software Tester', 15, 1300, 'software_tester.jpg', 'This is a description for Software Tester job.', 'Software Tester', 3, 105, 1, 11),
+('Project Manager', 14, 1400, 'project_manager.jpg', 'This is a description for Project Manager job.', 'Project Manager', 5, 106, 1, 17),
+('Security Analyst', 13, 1200, 'security_analyst.jpg', 'This is a description for Security Analyst job.', 'Security Analyst', 4, 107, 1, 18),
+('Data Scientist', 12, 1600, 'data_scientist.jpg', 'This is a description for Data Scientist job.', 'Data Scientist', 5, 108, 1, 13),
+('System Administrator', 11, 1400, 'system_admin.jpg', 'This is a description for System Administrator job.', 'System Administrator', 4, 109, 1, 20),
+('Software Engineer', 20, 1000, 'software_engineer_2.jpg', 'This is a description for Software Engineer job.', 'Software Engineer', 5, 110, 4, 11),
+('Web Developer', 19, 1200, 'web_dev_2.jpg', 'This is a description for Web Developer job.', 'Web Developer', 4, 111, 4, 12),
+('Database Analyst', 18, 1500, 'db_analyst_2.jpg', 'This is a description for Database Analyst job.', 'Database Analyst', 3, 112, 4, 13),
+('Network Administrator', 17, 1100, 'network_admin_2.jpg', 'This is a description for Network Administrator job.', 'Network Administrator', 5, 113, 4, 14),
+('UI/UX Designer', 16, 1000, 'ui_ux_designer_2.jpg', 'This is a description for UI/UX Designer job.', 'UI/UX Designer', 4, 114, 4, 15),
+('Software Tester', 15, 1300, 'software_tester_2.jpg', 'This is a description for Software Tester job.', 'Software Tester', 3, 115, 4, 11),
+('Project Manager', 14, 1400, 'project_manager_2.jpg', 'This is a description for Project Manager job.', 'Project Manager', 5, 116, 4, 17),
+('Security Analyst', 13, 1200, 'security_analyst_2.jpg', 'This is a description for Security Analyst job.', 'Security Analyst', 4, 117, 4, 18),
+('Data Scientist', 12, 1600, 'data_scientist_2.jpg', 'This is a description for Data Scientist job.', 'Data Scientist', 5, 118, 4, 13),
+('System Administrator', 11, 1400, 'system_admin_2.jpg', 'This is a description for System Administrator job.', 'System Administrator', 4, 119, 4, 20);
+
+
+CREATE TABLE rent_job (
+	id int PRIMARY KEY auto_increment,
+	code_job int, 
+	FOREIGN KEY (code_job) REFERENCES jobs(code_job) on DELETE CASCADE,
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES users(id) on DELETE CASCADE,
+	date_rent date,
+	complete BOOLEAN
+)
+
+
+INSERT INTO rent_job (code_job, user_id, date_rent, complete) VALUES
+(100, 2, '2024-02-05', FALSE),
+(112, 2, '2024-02-06', FALSE),
+(102, 3, '2024-02-07', FALSE),
+(103, 5, '2024-02-08', FALSE),
+(115, 5, '2024-02-09', FALSE),
+(118, 6, '2024-02-10', FALSE),
+(111, 6, '2024-02-11', FALSE),
+(117, 2, '2024-02-12', FALSE),
+(108, 3, '2024-02-13', FALSE),
+(109, 5, '2024-02-14', FALSE);
+
+CREATE TABLE comments (
+	id int PRIMARY KEY auto_increment,
+	code_job int,
+	FOREIGN KEY (code_job) REFERENCES jobs(code_job) on DELETE CASCADE,
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES users(id) on DELETE CASCADE,
+	date_comment date,
+	content VARCHAR(255),
+	star_comment int
+)
+
+INSERT INTO comments (code_job, user_id, date_comment, content, star_comment) VALUES
+(100, 1, '2024-02-05', 'This is a comment for job 100', 4),
+(101, 2, '2024-02-06', 'This is a comment for job 101', 5),
+(102, 3, '2024-02-07', 'This is a comment for job 102', 3),
+(103, 4, '2024-02-08', 'This is a comment for job 103', 4),
+(104, 5, '2024-02-09', 'This is a comment for job 104', 2),
+(105, 6, '2024-02-10', 'This is a comment for job 105', 5),
+(106, 1, '2024-02-11', 'This is a comment for job 106', 4),
+(107, 2, '2024-02-12', 'This is a comment for job 107', 3),
+(108, 3, '2024-02-13', 'This is a comment for job 108', 5),
+(109, 4, '2024-02-14', 'This is a comment for job 109', 4),
+(110, 5, '2024-02-15', 'This is a comment for job 110', 5),
+(111, 6, '2024-02-16', 'This is a comment for job 111', 3),
+(112, 1, '2024-02-17', 'This is a comment for job 112', 4),
+(113, 2, '2024-02-18', 'This is a comment for job 113', 2),
+(114, 3, '2024-02-19', 'This is a comment for job 114', 5),
+(115, 4, '2024-02-20', 'This is a comment for job 115', 4),
+(116, 5, '2024-02-21', 'This is a comment for job 116', 3),
+(117, 6, '2024-02-22', 'This is a comment for job 117', 5),
+(118, 1, '2024-02-23', 'This is a comment for job 118', 4),
+(119, 2, '2024-02-24', 'This is a comment for job 119', 3);
