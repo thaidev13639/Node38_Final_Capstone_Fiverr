@@ -92,7 +92,8 @@ model users {
   phone           String            @db.VarChar(255)
   birth_day       String            @db.VarChar(255)
   gender          String            @db.VarChar(255)
-  role            String            @db.VarChar(100)
+  role            String            @db.VarChar(50)
+  avatar          String            @db.VarChar(255)
   skill           String?           @db.VarChar(255)
   certification   String?           @db.VarChar(255)
   comments        comments[]
