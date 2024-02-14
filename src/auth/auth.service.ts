@@ -103,6 +103,7 @@ export class AuthService {
       secret: this.configService.get('SECRET_KEY'),
       expiresIn: this.configService.get('EXPIRESIN'),
     });
-    return resSuccessData(res, 200, 'Login Success...', token);
+
+    return resSuccessData(res, 200, 'Login Success...', { token });
   }
 }

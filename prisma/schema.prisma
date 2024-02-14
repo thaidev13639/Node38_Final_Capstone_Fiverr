@@ -94,8 +94,8 @@ model users {
   gender          String            @db.VarChar(255)
   role            String            @db.VarChar(50)
   avatar          String            @db.VarChar(255)
-  skill           String?           @db.VarChar(255)
-  certification   String?           @db.VarChar(255)
+  skill           Json?
+  certification   Json?
   comments        comments[]
   group_type_jobs group_type_jobs[]
   jobs            jobs[]
