@@ -18,18 +18,19 @@ CREATE TABLE users (
 	phone VARCHAR(255) NOT NULL,
 	birth_day VARCHAR(255) NOT NULL,
 	gender VARCHAR(255) NOT NULL,
-	role VARCHAR(100) NOT NULL,
-	skill VARCHAR(255),
-	certification VARCHAR(255)
+	role VARCHAR(50) NOT NULL,
+	avatar VARCHAR(255) NOT NULL,
+	skill Json,
+	certification Json
 )
 
-INSERT INTO users (name, email, pass_word, phone, birth_day, gender, role, skill, certification) VALUES
-('John Doe', 'john@example.com', 'password123', '123456789', '1990-05-15', 'Male', 'Admin', 'Java, Python', 'Certified Java Developer'),
-('Alice Smith', 'alice@example.com', 'abc123', '987654321', '1988-10-22', 'Female', 'User', 'JavaScript, HTML, CSS', 'Web Developer'),
-('Bob Johnson', 'bob@example.com', 'test123', '456789123', '1995-02-28', 'Male', 'User', 'C++, Java', NULL),
-('Emma Brown', 'emma@example.com', 'pass1234', '321654987', '1993-07-12', 'Female', 'Admin', 'Python, SQL', 'Certified Python Developer'),
-('Michael Wilson', 'michael@example.com', 'password', '789654123', '1985-12-05', 'Male', 'User', 'HTML, CSS', NULL),
-('Sophia Lee', 'sophia@example.com', '123456', '159753258', '1998-03-20', 'Female', 'User', 'C#, JavaScript', NULL);
+INSERT INTO users (name, email, pass_word, phone, birth_day, gender, role, avatar, skill, certification) VALUES
+('John Doe', 'john@example.com', 'password123', '123456789', '1990-01-01', 'male', 'user', 'http://example.com/avatar1.jpg', '["skill1", "skill2", "skill3"]', '["Certification A", "Certification B"]'),
+('Jane Smith', 'jane@example.com', 'password456', '987654321', '1992-05-15', 'female', 'user', 'http://example.com/avatar2.jpg', '["skill4", "skill5"]', '["Certification C"]'),
+('Alice Johnson', 'alice@example.com', 'password789', '111222333', '1988-12-20', 'female', 'Admin', 'http://example.com/avatar3.jpg', '["skill6", "skill7"]', '["Certification D", "Certification E"]'),
+('Bob Brown', 'bob@example.com', 'passwordabc', '444555666', '1995-03-10', 'male', 'user', 'http://example.com/avatar4.jpg', '["skill8"]', '["Certification F"]'),
+('David', 'bob@example.com', 'passwordabc', '444555666', '1995-03-10', 'male', 'user', 'http://example.com/avatar4.jpg', '["skill8"]', '["Certification F"]'),
+('Eva White', 'eva@example.com', 'passwordefg', '777888999', '1998-07-25', 'female', 'user', 'http://example.com/avatar5.jpg', '["skill9", "skill10"]', '["Certification G"]');
 
 
 CREATE TABLE type_jobs (
