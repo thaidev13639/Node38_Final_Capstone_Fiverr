@@ -1,6 +1,5 @@
 const innitAvatar = (full_name: string) => {
   let name = full_name.toUpperCase().split(' ');
-  console.log(name);
   if (name.length === 1) {
     return `https://ui-avatars.com/api/?name=${name[0][0]}&background=random&size=100`;
   }

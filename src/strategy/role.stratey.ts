@@ -20,7 +20,6 @@ export class RoleGuards implements CanActivate {
         HttpStatus.FORBIDDEN,
       );
     }
-    console.log(request.user);
     return true;
   }
 }
