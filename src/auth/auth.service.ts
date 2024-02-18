@@ -48,8 +48,8 @@ export class AuthService {
     let newPassWord = bcrypt.hashSync(pass_word, 10);
     let avatar = innitAvatar(name);
     let role = 'User';
-    let skill = null;
-    let certification = null;
+    let skill = [];
+    let certification = [];
 
     if (
       keyword_admin === this.configService.get('KEYWORD_ADMIN') &&

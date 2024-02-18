@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsArray,
   IsBoolean,
   IsEmail,
   IsEnum,
@@ -12,7 +11,7 @@ enum Role {
   User = 'User',
   Admin = 'Admin',
 }
-export class IUpdateUser {
+export class ISignUpByAdmin {
   @ApiProperty({ type: String, description: 'full_name' })
   @IsString()
   @IsNotEmpty()
@@ -48,16 +47,4 @@ export class IUpdateUser {
   @IsEnum(Role)
   @IsNotEmpty()
   role: Role;
-
-  @ApiProperty({ type: [String], description: 'List Skill' })
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  skill: string[];
-
-  @ApiProperty({ type: [String], description: 'List Certification' })
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  certification: string[];
 }

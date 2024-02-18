@@ -9,24 +9,23 @@ import {
 import { IUpdateUser } from './dto/updateUser.dto';
 import * as bcrypt from 'bcrypt';
 import { upperCaseName } from 'src/untils/uppercaseName/uppercaseName';
+import { ISignUpByAdmin } from './dto/signUp-by-admin.dto';
+import { innitAvatar } from 'src/untils/initAvatar/initAvatar';
 
 @Injectable()
 export class UserService {
   prisma = new PrismaClient();
   async getListUser(req: Request, res: Response): Promise<any> {
-    let role = req.user['role'];
+    const role = req.user['role'];
 
     let data = await this.prisma.users.findMany();
 
-    if (!role || role === 'User') {
-      let userData = data.map((ele) => {
-        ele.pass_word = '';
-        return ele;
-      });
-      return resSuccessData(res, 200, 'Get List User Success', userData);
-    }
+    let userData = data.map((ele) => {
+      ele.pass_word = '';
+      return ele;
+    });
 
-    return resSuccessData(res, 200, 'Get List User Success', data);
+    return resSuccessData(res, 200, 'Get List User Success', userData);
   }
 
   async getDetailUser(res: Response, req: Request, id: string): Promise<any> {
@@ -186,7 +185,11 @@ export class UserService {
     }
 
     if (req.user['role'] === 'User' && body.role !== userData.role) {
-      return resError(res, 400, 'User does not have enough power to set Role ');
+      return resError(
+        res,
+        400,
+        'User does not have enough power to set Role Admin ',
+      );
     }
 
     if (
@@ -252,6 +255,55 @@ export class UserService {
         },
       });
       return resSuccessMess(res, 201, 'Update Avatar Success');
+    } catch (error) {
+      return resError(res, error.statusCode, error.message);
+    }
+  }
+
+  async signUpByAdmin(res: Response, body: ISignUpByAdmin) {
+    let { name, email, pass_word, phone, birth_day, gender, role } = body;
+    const dataUser = await this.prisma.users.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (dataUser) {
+      return resError(res, 400, 'Email already exists');
+    }
+
+    if (phone.length > 11 || phone.length < 9 || isNaN(Number(phone))) {
+      return resError(res, 400, 'Is not type phone number');
+    }
+
+    const regularDate = /^\d{2}-\d{2}-\d{4}$/;
+    if (!birth_day.match(regularDate)) {
+      return resError(res, 400, 'Date Should be dd-mm-yyyy');
+    }
+
+    let dataGender = 'Male';
+    if (!gender) {
+      dataGender = 'Female';
+    }
+
+    const newData = {
+      name: upperCaseName(name),
+      email,
+      pass_word: bcrypt.hashSync(pass_word, 10),
+      phone,
+      birth_day,
+      gender: dataGender,
+      role,
+      avatar: innitAvatar(name),
+      skill: [],
+      certification: [],
+    };
+
+    try {
+      await this.prisma.users.create({
+        data: newData,
+      });
+      return resSuccessMess(res, 201, `Create Account ${role} Success `);
     } catch (error) {
       return resError(res, error.statusCode, error.message);
     }

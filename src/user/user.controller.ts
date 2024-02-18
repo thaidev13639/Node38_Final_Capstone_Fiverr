@@ -28,6 +28,7 @@ import { RoleGuards } from 'src/strategy/role.stratey';
 import { IUpdateUser } from './dto/updateUser.dto';
 import { IUploadFileDto } from './dto/uploadAvatar.dto';
 import { UserService } from './user.service';
+import { ISignUpByAdmin } from './dto/signUp-by-admin.dto';
 
 @ApiTags('User')
 @UseGuards(AuthGuard('jwt'))
@@ -51,7 +52,11 @@ export class UserController {
     return this.userService.getDetailUser(res, req, id);
   }
 
-  @ApiQuery({ name: 'filter', description: 'search by name', required: false })
+  @ApiQuery({
+    name: 'filter',
+    description: 'search by name',
+    required: false,
+  })
   @ApiParam({ name: 'size' })
   @ApiParam({ name: 'page' })
   @Get('/page-list/:page/:size')
@@ -65,7 +70,7 @@ export class UserController {
     return this.userService.getPageUser(page, size, filter, req, res);
   }
 
-  @ApiParam({ name: 'name', description: 'search by name user need page 1' })
+  @ApiParam({ name: 'name', description: 'search by name' })
   @Get('/search-user/:name')
   getUserByName(
     @Param('name') name: string,
@@ -113,5 +118,12 @@ export class UserController {
     @Res() res,
   ): Promise<any> {
     return this.userService.uploadAvatar(req, res, file);
+  }
+
+  @ApiBody({ type: ISignUpByAdmin })
+  @UseGuards(RoleGuards)
+  @Post('/signup-by-admin')
+  signUpByAdmin(@Res() res, @Body() body: ISignUpByAdmin): Promise<any> {
+    return this.userService.signUpByAdmin(res, body);
   }
 }
