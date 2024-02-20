@@ -25,12 +25,12 @@ CREATE TABLE users (
 )
 
 INSERT INTO users (name, email, pass_word, phone, birth_day, gender, role, avatar, skill, certification) VALUES
-('John Doe', 'john@example.com', 'password123', '123456789', '1990-01-01', 'male', 'user', 'http://example.com/avatar1.jpg', '["skill1", "skill2", "skill3"]', '["Certification A", "Certification B"]'),
-('Jane Smith', 'jane@example.com', 'password456', '987654321', '1992-05-15', 'female', 'user', 'http://example.com/avatar2.jpg', '["skill4", "skill5"]', '["Certification C"]'),
+('John Doe', 'john@example.com', 'password123', '123456789', '1990-01-01', 'male', 'User', 'http://example.com/avatar1.jpg', '["skill1", "skill2", "skill3"]', '["Certification A", "Certification B"]'),
+('Jane Smith', 'jane@example.com', 'password456', '987654321', '1992-05-15', 'female', 'User', 'http://example.com/avatar2.jpg', '["skill4", "skill5"]', '["Certification C"]'),
 ('Alice Johnson', 'alice@example.com', 'password789', '111222333', '1988-12-20', 'female', 'Admin', 'http://example.com/avatar3.jpg', '["skill6", "skill7"]', '["Certification D", "Certification E"]'),
-('Bob Brown', 'bob@example.com', 'passwordabc', '444555666', '1995-03-10', 'male', 'user', 'http://example.com/avatar4.jpg', '["skill8"]', '["Certification F"]'),
-('David', 'bob@example.com', 'passwordabc', '444555666', '1995-03-10', 'male', 'user', 'http://example.com/avatar4.jpg', '["skill8"]', '["Certification F"]'),
-('Eva White', 'eva@example.com', 'passwordefg', '777888999', '1998-07-25', 'female', 'user', 'http://example.com/avatar5.jpg', '["skill9", "skill10"]', '["Certification G"]');
+('Bob Brown', 'bob@example.com', 'passwordabc', '444555666', '1995-03-10', 'male', 'User', 'http://example.com/avatar4.jpg', '["skill8"]', '["Certification F"]'),
+('David', 'bob@example.com', 'passwordabc', '444555666', '1995-03-10', 'male', 'User', 'http://example.com/avatar4.jpg', '["skill8"]', '["Certification F"]'),
+('Eva White', 'eva@example.com', 'passwordefg', '777888999', '1998-07-25', 'female', 'User', 'http://example.com/avatar5.jpg', '["skill9", "skill10"]', '["Certification G"]');
 
 
 CREATE TABLE type_jobs (
@@ -58,14 +58,14 @@ CREATE TABLE group_type_jobs (
 	image VARCHAR(255) NOT NULL,
 	code_group_job int UNIQUE,
 	PRIMARY KEY (id, code_group_job),
-	group_job_id int,
-	FOREIGN KEY (group_job_id) REFERENCES type_jobs(id) on DELETE CASCADE,
+	type_job_id int,
+	FOREIGN KEY (type_job_id) REFERENCES type_jobs(id) on DELETE CASCADE,
 	user_id int,
 	FOREIGN KEY (user_id) REFERENCES users(id) on DELETE CASCADE,
 	INDEX idx_code_group_job (code_group_job)
 ) 
 
-INSERT INTO group_type_jobs (name_group_job, image, code_group_job, group_job_id, user_id) VALUES
+INSERT INTO group_type_jobs (name_group_job, image, code_group_job, type_job_id, user_id) VALUES
 ('Full Stack Developer', 'full_stack.jpg', 11, 1, 1),
 ('Front-end Developer', 'frontend.jpg', 12, 1, 1),
 ('Back-end Developer', 'backend.jpg', 13, 1, 1),
