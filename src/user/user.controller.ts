@@ -95,7 +95,11 @@ export class UserController {
   @ApiParam({ name: 'user_id' })
   @UseGuards(RoleGuards)
   @Delete('/delete-user/:user_id')
-  deleteUser(@Req() req, @Res() res, @Param('user_id') id): Promise<any> {
+  deleteUser(
+    @Req() req,
+    @Res() res,
+    @Param('user_id') id: string,
+  ): Promise<any> {
     return this.userService.deleteUser(req, res, id);
   }
 
