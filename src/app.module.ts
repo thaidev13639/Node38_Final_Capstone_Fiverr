@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     AuthModule,
     UserModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -205,7 +205,7 @@ export class UserService {
 
       return resSuccessMess(res, 201, `Update User ID:${id} Success`);
     } catch (error) {
-      return resError(res, error.statusCode, error.message);
+      return resError(res, 404, error.message);
     }
   }
 
@@ -231,7 +231,7 @@ export class UserService {
       await this.prisma.users.delete({ where: { id: +id } });
       return resSuccessMess(res, 200, `Delete acccount ID:${id} Success`);
     } catch (error) {
-      return resError(res, error.statusCode, error.message);
+      return resError(res, 404, error.message);
     }
   }
 
@@ -256,7 +256,7 @@ export class UserService {
       });
       return resSuccessMess(res, 201, 'Update Avatar Success');
     } catch (error) {
-      return resError(res, error.statusCode, error.message);
+      return resError(res, 404, error.message);
     }
   }
 
@@ -305,7 +305,7 @@ export class UserService {
       });
       return resSuccessMess(res, 201, `Create Account ${role} Success `);
     } catch (error) {
-      return resError(res, error.statusCode, error.message);
+      return resError(res, 404, error.message);
     }
   }
 }
