@@ -22,15 +22,15 @@ model comments {
 }
 
 model group_type_jobs {
-  id             Int        @default(autoincrement())
-  name_group_job String     @db.VarChar(255)
-  image          String     @db.VarChar(255)
-  code_group_job Int        @unique(map: "code_group_job")
-  type_job_id    Int?
-  user_id        Int?
-  type_jobs      type_jobs? @relation(fields: [type_job_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_type_jobs_ibfk_1")
-  users          users?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_type_jobs_ibfk_2")
-  jobs           jobs[]
+  id               Int                @default(autoincrement())
+  name_group_job   String             @db.VarChar(255)
+  image            String             @db.VarChar(255)
+  code_group_job   Int                @unique(map: "code_group_job")
+  type_job_id      Int?
+  user_id          Int?
+  detail_group_job detail_group_job[]
+  type_jobs        type_jobs?         @relation(fields: [type_job_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_type_jobs_ibfk_1")
+  users            users?             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_type_jobs_ibfk_2")
 
   @@id([id, code_group_job])
   @@index([code_group_job], map: "idx_code_group_job")
@@ -39,26 +39,26 @@ model group_type_jobs {
 }
 
 model jobs {
-  id               Int              @default(autoincrement())
-  name_job         String           @db.VarChar(255)
-  rating           Int
-  price            Int
-  image            String           @db.VarChar(255)
-  decription       String           @db.VarChar(255)
-  short_decription String           @db.VarChar(255)
-  star_job         Int
-  code_job         Int              @unique(map: "code_job")
-  user_id          Int?
-  code_group_job   Int?
-  comments         comments[]
-  users            users?           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_1")
-  group_type_jobs  group_type_jobs? @relation(fields: [code_group_job], references: [code_group_job], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_2")
-  rent_job         rent_job[]
+  id                Int               @default(autoincrement())
+  name_job          String            @db.VarChar(255)
+  rating            Int
+  price             Int
+  image             String            @db.VarChar(255)
+  decription        String            @db.VarChar(255)
+  short_decription  String            @db.VarChar(255)
+  star_job          Int
+  code_job          Int               @unique(map: "code_job")
+  user_id           Int?
+  code_detail_group Int?
+  comments          comments[]
+  users             users?            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_1")
+  detail_group_job  detail_group_job? @relation(fields: [code_detail_group], references: [code_detail_group], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_2")
+  rent_job          rent_job[]
 
   @@id([id, code_job])
-  @@index([code_group_job], map: "code_group_job")
   @@index([code_job], map: "idx_code_job")
   @@index([user_id], map: "user_id")
+  @@index([code_detail_group], map: "code_detail_group")
 }
 
 model rent_job {
@@ -101,4 +101,17 @@ model users {
   jobs            jobs[]
   rent_job        rent_job[]
   type_jobs       type_jobs[]
+}
+
+model detail_group_job {
+  id                Int              @default(autoincrement())
+  name_detail       String           @db.VarChar(100)
+  code_detail_group Int              @unique(map: "code_detail_group")
+  code_group_job    Int?
+  group_type_jobs   group_type_jobs? @relation(fields: [code_group_job], references: [code_group_job], onDelete: Cascade, onUpdate: NoAction, map: "detail_group_job_ibfk_1")
+  jobs              jobs[]
+
+  @@id([id, code_detail_group])
+  @@index([code_group_job], map: "code_group_job")
+  @@index([code_detail_group], map: "idx_code_group_detail")
 }

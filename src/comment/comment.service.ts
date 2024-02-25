@@ -22,7 +22,6 @@ export class CommentService {
   }
 
   async getListCommentbyCodeJob(res: Response, code_job: string) {
-    console.log(code_job);
 
     if (isNaN(Number(code_job))) {
       return resError(res, 400, 'code_job is number');
