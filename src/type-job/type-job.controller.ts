@@ -35,9 +35,14 @@ export class TypeJobController {
     return this.typeJobService.getListTypeJob(res);
   }
 
+  @Get('/list-full-type-to-detail')
+  getListFulltoDetail(@Res() res): Promise<any> {
+    return this.typeJobService.getListFulltoDetail(res);
+  }
+
   @ApiParam({ name: 'id', description: 'type_job_id' })
   @Get('/detail-type-job/:id')
-  getDetailTypeJob(@Param('id') id: string, @Res() res) {
+  getDetailTypeJob(@Param('id') id: string, @Res() res): Promise<any> {
     return this.typeJobService.getDetailTypeJob(res, id);
   }
 
@@ -64,7 +69,11 @@ export class TypeJobController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Post('/create-type-job')
-  createTypeJob(@Req() req, @Res() res, @Body() body: ICreateTypeJob) {
+  createTypeJob(
+    @Req() req,
+    @Res() res,
+    @Body() body: ICreateTypeJob,
+  ): Promise<any> {
     return this.typeJobService.createTypeJob(req, res, body);
   }
 
@@ -73,7 +82,11 @@ export class TypeJobController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Put('/update-type-job')
-  updateTypeJob(@Req() req, @Res() res, @Body() body: IUpdateTypeJob) {
+  updateTypeJob(
+    @Req() req,
+    @Res() res,
+    @Body() body: IUpdateTypeJob,
+  ): Promise<any> {
     return this.typeJobService.updateTypeJob(req, res, body);
   }
 
@@ -82,7 +95,7 @@ export class TypeJobController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Delete('/delete-type-job/:id')
-  deleteTypeJob(@Param('id') id: string, @Req() req, @Res() res) {
+  deleteTypeJob(@Param('id') id: string, @Req() req, @Res() res): Promise<any> {
     return this.typeJobService.deleteTypeJob(req, res, id);
   }
 }

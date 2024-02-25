@@ -23,7 +23,36 @@ export class TypeJobService {
     }
   }
 
-  async getDetailTypeJob(res: Response, id: string) {
+  async getListFulltoDetail(res: Response): Promise<any> {
+    try {
+      const listFull = await this.prisma.type_jobs.findMany({
+        select: {
+          id: true,
+          name_type: true,
+          group_type_jobs: {
+            select: {
+              id: true,
+              name_group_job: true,
+              code_group_job: true,
+              detail_group_job: {
+                select: {
+                  id: true,
+                  name_detail: true,
+                  code_detail_group: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return resSuccessData(res, 200, 'Success', listFull);
+    } catch (error) {
+      return resError(res, 500, error.message);
+    }
+  }
+
+  async getDetailTypeJob(res: Response, id: string): Promise<any> {
     if (!id || isNaN(Number(id))) {
       return resError(res, 400, 'id should be Number');
     }
@@ -72,7 +101,11 @@ export class TypeJobService {
     }
   }
 
-  async createTypeJob(req: Request, res: Response, body: ICreateTypeJob) {
+  async createTypeJob(
+    req: Request,
+    res: Response,
+    body: ICreateTypeJob,
+  ): Promise<any> {
     const email = req.user['email'];
 
     const userData = await this.prisma.users.findFirst({
@@ -96,7 +129,11 @@ export class TypeJobService {
     }
   }
 
-  async updateTypeJob(req: Request, res: Response, body: IUpdateTypeJob) {
+  async updateTypeJob(
+    req: Request,
+    res: Response,
+    body: IUpdateTypeJob,
+  ): Promise<any> {
     const email = req.user['email'];
 
     const typeJobData = await this.prisma.type_jobs.findFirst({
@@ -146,7 +183,7 @@ export class TypeJobService {
     }
   }
 
-  async deleteTypeJob(req: Request, res: Response, id: string) {
+  async deleteTypeJob(req: Request, res: Response, id: string): Promise<any> {
     if (isNaN(Number(id))) {
       return resError(res, 400, 'id should be type Number');
     }
