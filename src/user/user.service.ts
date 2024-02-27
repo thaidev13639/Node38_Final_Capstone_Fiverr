@@ -235,7 +235,11 @@ export class UserService {
     }
   }
 
-  async uploadAvatar(req: Request, res: Response, file: any): Promise<any> {
+  async uploadAvatar(
+    req: Request,
+    res: Response,
+    file: Express.Multer.File,
+  ): Promise<any> {
     const userData = await this.prisma.users.findFirst({
       where: {
         email: req.user['email'],

@@ -29,6 +29,7 @@ import { IUpdateUser } from './dto/updateUser.dto';
 import { IUploadFileDto } from './dto/uploadAvatar.dto';
 import { UserService } from './user.service';
 import { ISignUpByAdmin } from './dto/signUp-by-admin.dto';
+import { Request, Response } from 'express';
 
 @ApiTags('User')
 @UseGuards(AuthGuard('jwt'))
@@ -38,7 +39,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('/get-list')
-  getListUser(@Req() req, @Res() res): Promise<any> {
+  getListUser(@Req() req: Request, @Res() res: Response): Promise<any> {
     return this.userService.getListUser(req, res);
   }
 
@@ -46,8 +47,8 @@ export class UserController {
   @Get('/detail-user/:user_id')
   getDetailUser(
     @Param('user_id') id: string,
-    @Res() res,
-    @Req() req,
+    @Res() res: Response,
+    @Req() req: Request,
   ): Promise<any> {
     return this.userService.getDetailUser(res, req, id);
   }
@@ -64,8 +65,8 @@ export class UserController {
     @Param('page') page: string,
     @Param('size') size: string,
     @Query('filter') filter,
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
   ): Promise<any> {
     return this.userService.getPageUser(page, size, filter, req, res);
   }
@@ -74,8 +75,8 @@ export class UserController {
   @Get('/search-user/:name')
   getUserByName(
     @Param('name') name: string,
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
   ): Promise<any> {
     return this.userService.getUserByName(req, res, name);
   }
@@ -85,8 +86,8 @@ export class UserController {
   @Put('/update-user/:user_id')
   updateUser(
     @Param('user_id') id: string,
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
     @Body() body: IUpdateUser,
   ): Promise<any> {
     return this.userService.updateUser(req, res, id, body);
@@ -96,14 +97,13 @@ export class UserController {
   @UseGuards(RoleGuards)
   @Delete('/delete-user/:user_id')
   deleteUser(
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
     @Param('user_id') id: string,
   ): Promise<any> {
     return this.userService.deleteUser(req, res, id);
   }
 
-  @Post('/upload-avatar')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -116,10 +116,11 @@ export class UserController {
     }),
   )
   @ApiBody({ type: IUploadFileDto, description: 'upload avatar' })
+  @Put('/upload-avatar')
   uploadAvatar(
     @UploadedFile() file: Express.Multer.File,
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
   ): Promise<any> {
     return this.userService.uploadAvatar(req, res, file);
   }
@@ -127,7 +128,10 @@ export class UserController {
   @ApiBody({ type: ISignUpByAdmin })
   @UseGuards(RoleGuards)
   @Post('/signup-by-admin')
-  signUpByAdmin(@Res() res, @Body() body: ISignUpByAdmin): Promise<any> {
+  signUpByAdmin(
+    @Res() res: Response,
+    @Body() body: ISignUpByAdmin,
+  ): Promise<any> {
     return this.userService.signUpByAdmin(res, body);
   }
 }

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model comments {
-  id           Int       @id @default(autoincrement())
+  id           Int       @id @unique(map: "id") @default(autoincrement())
   code_job     Int?
   user_id      Int?
   date_comment DateTime? @db.Date
@@ -22,7 +22,7 @@ model comments {
 }
 
 model group_type_jobs {
-  id               Int                @default(autoincrement())
+  id               Int                @unique(map: "id") @default(autoincrement())
   name_group_job   String             @db.VarChar(255)
   image            String             @db.VarChar(255)
   code_group_job   Int                @unique(map: "code_group_job")
@@ -39,7 +39,7 @@ model group_type_jobs {
 }
 
 model jobs {
-  id                Int               @default(autoincrement())
+  id                Int               @unique(map: "id") @default(autoincrement())
   name_job          String            @db.VarChar(255)
   rating            Int
   price             Int
@@ -62,7 +62,7 @@ model jobs {
 }
 
 model rent_job {
-  id        Int       @id @default(autoincrement())
+  id        Int       @id @unique(map: "id") @default(autoincrement())
   code_job  Int?
   user_id   Int?
   date_rent DateTime? @db.Date
@@ -75,7 +75,7 @@ model rent_job {
 }
 
 model type_jobs {
-  id              Int               @id @default(autoincrement())
+  id              Int               @id @unique(map: "id") @default(autoincrement())
   name_type       String            @db.VarChar(255)
   user_id         Int?
   group_type_jobs group_type_jobs[]
@@ -85,7 +85,7 @@ model type_jobs {
 }
 
 model users {
-  id              Int               @id @default(autoincrement())
+  id              Int               @id @unique(map: "id") @default(autoincrement())
   name            String            @db.VarChar(100)
   email           String            @db.VarChar(255)
   pass_word       String            @db.VarChar(255)
@@ -104,7 +104,7 @@ model users {
 }
 
 model detail_group_job {
-  id                Int              @default(autoincrement())
+  id                Int              @unique(map: "id") @default(autoincrement())
   name_detail       String           @db.VarChar(100)
   code_detail_group Int              @unique(map: "code_detail_group")
   code_group_job    Int?
