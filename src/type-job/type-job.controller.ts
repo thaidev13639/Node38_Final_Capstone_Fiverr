@@ -11,19 +11,19 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { TypeJobService } from './type-job.service';
+import { AuthGuard } from '@nestjs/passport';
 import {
-  ApiBasicAuth,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
-import { ICreateTypeJob } from './dto/createTypeJob.dto';
 import { RoleGuards } from 'src/strategy/role.stratey';
+import { ICreateTypeJob } from './dto/createTypeJob.dto';
 import { IUpdateTypeJob } from './dto/updateTypeJob.dto';
+import { TypeJobService } from './type-job.service';
+import { Request, Response } from 'express';
 
 @ApiTags('Type-Job')
 @Controller('type-job')
@@ -31,18 +31,21 @@ export class TypeJobController {
   constructor(private readonly typeJobService: TypeJobService) {}
 
   @Get('/list-type-job')
-  getListTypeJob(@Res() res): Promise<any> {
+  getListTypeJob(@Res() res: Response): Promise<any> {
     return this.typeJobService.getListTypeJob(res);
   }
 
   @Get('/list-full-type-to-detail')
-  getListFulltoDetail(@Res() res): Promise<any> {
+  getListFulltoDetail(@Res() res: Response): Promise<any> {
     return this.typeJobService.getListFulltoDetail(res);
   }
 
   @ApiParam({ name: 'id', description: 'type_job_id' })
   @Get('/detail-type-job/:id')
-  getDetailTypeJob(@Param('id') id: string, @Res() res): Promise<any> {
+  getDetailTypeJob(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
     return this.typeJobService.getDetailTypeJob(res, id);
   }
 
@@ -54,7 +57,7 @@ export class TypeJobController {
     @Query('page') page: string,
     @Query('size') size: string,
     @Query('filter') filter: string,
-    @Res() res,
+    @Res() res: Response,
   ): Promise<any> {
     return this.typeJobService.getListTypeJobPagination(
       res,
@@ -70,8 +73,8 @@ export class TypeJobController {
   @ApiBearerAuth()
   @Post('/create-type-job')
   createTypeJob(
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
     @Body() body: ICreateTypeJob,
   ): Promise<any> {
     return this.typeJobService.createTypeJob(req, res, body);
@@ -83,8 +86,8 @@ export class TypeJobController {
   @ApiBearerAuth()
   @Put('/update-type-job')
   updateTypeJob(
-    @Req() req,
-    @Res() res,
+    @Req() req: Request,
+    @Res() res: Response,
     @Body() body: IUpdateTypeJob,
   ): Promise<any> {
     return this.typeJobService.updateTypeJob(req, res, body);
@@ -95,7 +98,11 @@ export class TypeJobController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Delete('/delete-type-job/:id')
-  deleteTypeJob(@Param('id') id: string, @Req() req, @Res() res): Promise<any> {
+  deleteTypeJob(
+    @Param('id') id: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {
     return this.typeJobService.deleteTypeJob(req, res, id);
   }
 }
