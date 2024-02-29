@@ -49,13 +49,13 @@ export class TypeJobController {
     return this.typeJobService.getDetailTypeJob(res, id);
   }
 
-  @ApiQuery({ name: 'page' })
-  @ApiQuery({ name: 'size' })
   @ApiQuery({ name: 'filter', description: 'search by name', required: false })
-  @Get('/list-type-job/pagination')
+  @ApiParam({ name: 'size' })
+  @ApiParam({ name: 'page' })
+  @Get('/list-type-job/:page/:size')
   getListTypeJobPagination(
-    @Query('page') page: string,
-    @Query('size') size: string,
+    @Param('page') page: string,
+    @Param('size') size: string,
     @Query('filter') filter: string,
     @Res() res: Response,
   ): Promise<any> {
