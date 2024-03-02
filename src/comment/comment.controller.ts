@@ -27,13 +27,13 @@ export class CommentController {
     return this.commentService.getListComment(res);
   }
 
-  @ApiParam({ name: 'code_job' })
-  @Get('/list-comment-by-code-job/:code_job')
+  @ApiParam({ name: 'job_id' })
+  @Get('/list-comment-by-code-job/:job_id')
   getListCommentbyCodeJob(
-    @Param('code_job') code_job: string,
+    @Param('job_id') job_id: string,
     @Res() res: Response,
   ) {
-    return this.commentService.getListCommentbyCodeJob(res, code_job);
+    return this.commentService.getListCommentbyCodeJob(res, job_id);
   }
 
   @ApiBody({ type: ICreateComment })

@@ -9,68 +9,75 @@ datasource db {
 
 model comments {
   id           Int       @id @unique(map: "id") @default(autoincrement())
-  code_job     Int?
+  job_id       Int?
   user_id      Int?
   date_comment DateTime? @db.Date
   content      String?   @db.VarChar(255)
   star_comment Int?
-  jobs         jobs?     @relation(fields: [code_job], references: [code_job], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_1")
+  jobs         jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_1")
   users        users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_2")
 
-  @@index([code_job], map: "code_job")
+  @@index([job_id], map: "job_id")
+  @@index([user_id], map: "user_id")
+}
+
+model detail_group_job {
+  id              Int              @id @unique(map: "id") @default(autoincrement())
+  name_detail     String           @db.VarChar(100)
+  group_type_id   Int?
+  user_id         Int?
+  group_type_jobs group_type_jobs? @relation(fields: [group_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "detail_group_job_ibfk_1")
+  users           users?           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "detail_group_job_ibfk_2")
+  jobs            jobs[]
+
+  @@index([group_type_id], map: "group_type_id")
   @@index([user_id], map: "user_id")
 }
 
 model group_type_jobs {
-  id               Int                @unique(map: "id") @default(autoincrement())
+  id               Int                @id @unique(map: "id") @default(autoincrement())
   name_group_job   String             @db.VarChar(255)
   image            String             @db.VarChar(255)
-  code_group_job   Int                @unique(map: "code_group_job")
   type_job_id      Int?
   user_id          Int?
   detail_group_job detail_group_job[]
   type_jobs        type_jobs?         @relation(fields: [type_job_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_type_jobs_ibfk_1")
   users            users?             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_type_jobs_ibfk_2")
 
-  @@id([id, code_group_job])
-  @@index([code_group_job], map: "idx_code_group_job")
-  @@index([user_id], map: "user_id")
   @@index([type_job_id], map: "type_job_id")
+  @@index([user_id], map: "user_id")
 }
 
 model jobs {
-  id                Int               @unique(map: "id") @default(autoincrement())
-  name_job          String            @db.VarChar(255)
-  rating            Int
-  price             Int
-  image             String            @db.VarChar(255)
-  decription        String            @db.VarChar(255)
-  short_decription  String            @db.VarChar(255)
-  star_job          Int
-  code_job          Int               @unique(map: "code_job")
-  user_id           Int?
-  code_detail_group Int?
-  comments          comments[]
-  users             users?            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_1")
-  detail_group_job  detail_group_job? @relation(fields: [code_detail_group], references: [code_detail_group], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_2")
-  rent_job          rent_job[]
+  id               Int               @id @unique(map: "id") @default(autoincrement())
+  name_job         String            @db.VarChar(255)
+  rating           Int
+  price            Int
+  image            String            @db.VarChar(255)
+  decription       String            @db.VarChar(255)
+  short_decription String            @db.VarChar(255)
+  star_job         Int
+  detail_group_id  Int?
+  user_id          Int?
+  comments         comments[]
+  detail_group_job detail_group_job? @relation(fields: [detail_group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_1")
+  users            users?            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "jobs_ibfk_2")
+  rent_job         rent_job[]
 
-  @@id([id, code_job])
-  @@index([code_job], map: "idx_code_job")
+  @@index([detail_group_id], map: "detail_group_id")
   @@index([user_id], map: "user_id")
-  @@index([code_detail_group], map: "code_detail_group")
 }
 
 model rent_job {
   id        Int       @id @unique(map: "id") @default(autoincrement())
-  code_job  Int?
+  job_id    Int?
   user_id   Int?
   date_rent DateTime? @db.Date
   complete  Boolean?
-  jobs      jobs?     @relation(fields: [code_job], references: [code_job], onDelete: Cascade, onUpdate: NoAction, map: "rent_job_ibfk_1")
+  jobs      jobs?     @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "rent_job_ibfk_1")
   users     users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "rent_job_ibfk_2")
 
-  @@index([code_job], map: "code_job")
+  @@index([job_id], map: "job_id")
   @@index([user_id], map: "user_id")
 }
 
@@ -85,33 +92,21 @@ model type_jobs {
 }
 
 model users {
-  id              Int               @id @unique(map: "id") @default(autoincrement())
-  name            String            @db.VarChar(100)
-  email           String            @db.VarChar(255)
-  pass_word       String            @db.VarChar(255)
-  phone           String            @db.VarChar(255)
-  birth_day       String            @db.VarChar(255)
-  gender          String            @db.VarChar(255)
-  role            String            @db.VarChar(50)
-  avatar          String            @db.VarChar(255)
-  skill           Json?
-  certification   Json?
-  comments        comments[]
-  group_type_jobs group_type_jobs[]
-  jobs            jobs[]
-  rent_job        rent_job[]
-  type_jobs       type_jobs[]
-}
-
-model detail_group_job {
-  id                Int              @unique(map: "id") @default(autoincrement())
-  name_detail       String           @db.VarChar(100)
-  code_detail_group Int              @unique(map: "code_detail_group")
-  code_group_job    Int?
-  group_type_jobs   group_type_jobs? @relation(fields: [code_group_job], references: [code_group_job], onDelete: Cascade, onUpdate: NoAction, map: "detail_group_job_ibfk_1")
-  jobs              jobs[]
-
-  @@id([id, code_detail_group])
-  @@index([code_group_job], map: "code_group_job")
-  @@index([code_detail_group], map: "idx_code_group_detail")
+  id               Int                @id @unique(map: "id") @default(autoincrement())
+  name             String             @db.VarChar(100)
+  email            String             @db.VarChar(255)
+  pass_word        String             @db.VarChar(255)
+  phone            String             @db.VarChar(255)
+  birth_day        String             @db.VarChar(255)
+  gender           String             @db.VarChar(255)
+  role             String             @db.VarChar(50)
+  avatar           String             @db.VarChar(255)
+  skill            Json?
+  certification    Json?
+  comments         comments[]
+  detail_group_job detail_group_job[]
+  group_type_jobs  group_type_jobs[]
+  jobs             jobs[]
+  rent_job         rent_job[]
+  type_jobs        type_jobs[]
 }

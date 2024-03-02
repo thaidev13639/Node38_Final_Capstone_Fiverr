@@ -22,14 +22,8 @@ export class GroupTypeService {
           id: true,
           name_group_job: true,
           image: true,
-          code_group_job: true,
-          detail_group_job: {
-            select: {
-              id: true,
-              name_detail: true,
-              code_detail_group: true,
-            },
-          },
+          type_job_id: true,
+          user_id: true,
         },
       });
       return resSuccessData(res, 200, 'Success', groupData);
@@ -51,12 +45,12 @@ export class GroupTypeService {
         id: true,
         name_group_job: true,
         image: true,
-        code_group_job: true,
+        type_job_id: true,
         detail_group_job: {
           select: {
             id: true,
             name_detail: true,
-            code_detail_group: true,
+            group_type_id: true,
           },
         },
       },
@@ -101,21 +95,8 @@ export class GroupTypeService {
     res: Response,
     body: ICreateGroupType,
   ): Promise<any> {
-    let { name_group_job, code_group_job, type_job_id } = body;
+    let { name_group_job, type_job_id } = body;
     const email = req.user['email'];
-
-    if (code_group_job < 10 || code_group_job >= 100) {
-      return resError(res, 400, 'Code Group should be from 10 to 99');
-    }
-    const isCodeGroup = await this.prisma.group_type_jobs.findFirst({
-      where: {
-        code_group_job,
-      },
-    });
-
-    if (isCodeGroup) {
-      return resError(res, 400, 'This group type code already exists');
-    }
 
     const isTypeJob = await this.prisma.type_jobs.findFirst({
       where: {
@@ -136,7 +117,6 @@ export class GroupTypeService {
     const newData = {
       name_group_job: upperCaseName(name_group_job),
       image: innitAvatar(name_group_job),
-      code_group_job,
       type_job_id,
       user_id: dataUser.id,
     };
@@ -156,7 +136,7 @@ export class GroupTypeService {
     id: string,
     body: IUpdateGroupType,
   ): Promise<any> {
-    const { code_group_job, name_group_job, type_job_id } = body;
+    const { name_group_job, type_job_id } = body;
 
     if (id && isNaN(Number(id))) {
       return resError(res, 400, 'id should be type Number');
@@ -172,21 +152,6 @@ export class GroupTypeService {
       return resError(res, 404, `Group Type have ID: ${id} not exists`);
     }
 
-    if (code_group_job < 10 || code_group_job >= 100) {
-      return resError(res, 400, 'Code Group should be from 10 to 99');
-    }
-
-    const isCodeGroup = await this.prisma.group_type_jobs.findFirst({
-      where: { code_group_job },
-    });
-
-    if (
-      isCodeGroup &&
-      isCodeGroup.code_group_job !== isGroupType.code_group_job
-    ) {
-      return resError(res, 400, 'This group type code already exists');
-    }
-
     const isTypeJob = await this.prisma.type_jobs.findFirst({
       where: {
         id: type_job_id,
@@ -200,7 +165,6 @@ export class GroupTypeService {
     const newData = {
       name_group_job: upperCaseName(name_group_job),
       image: isGroupType.image,
-      code_group_job,
       type_job_id,
       user_id: isGroupType.user_id,
     };
@@ -250,7 +214,6 @@ export class GroupTypeService {
     file: Express.Multer.File,
     id: string,
   ): Promise<any> {
-    console.log(file.path);
 
     if (id && isNaN(Number(id))) {
       return resError(res, 400, 'id should be type Number');
