@@ -28,7 +28,7 @@ export class CommentController {
   }
 
   @ApiParam({ name: 'job_id' })
-  @Get('/list-comment-by-code-job/:job_id')
+  @Get('/list-comment/:job_id')
   getListCommentbyCodeJob(
     @Param('job_id') job_id: string,
     @Res() res: Response,
