@@ -7,11 +7,6 @@ export class ICreateGroupType {
   @IsNotEmpty()
   name_group_job: string;
 
-  @ApiProperty({ type: Number, description: 'code group' })
-  @IsNumber()
-  @IsNotEmpty()
-  code_group_job: number;
-
   @ApiProperty({ type: Number, description: 'Type ID' })
   @IsNotEmpty()
   @IsNumber()

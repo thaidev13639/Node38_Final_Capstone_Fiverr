@@ -2,10 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class ICreateComment {
-  @ApiProperty({ type: Number, description: 'code_job' })
+  @ApiProperty({ type: Number, description: 'job_id' })
   @IsNumber()
   @IsNotEmpty()
-  code_job: number;
+  job_id: number;
 
   @ApiProperty({ type: Number, description: 'user_id' })
   @IsNumber()

@@ -21,25 +21,24 @@ export class CommentService {
     }
   }
 
-  async getListCommentbyCodeJob(res: Response, code_job: string) {
-
-    if (isNaN(Number(code_job))) {
+  async getListCommentbyCodeJob(res: Response, job_id: string) {
+    if (isNaN(Number(job_id))) {
       return resError(res, 400, 'code_job is number');
     }
 
     const dataCodeJob = await this.prisma.jobs.findFirst({
       where: {
-        code_job: +code_job,
+        id: +job_id,
       },
     });
 
     if (!dataCodeJob) {
-      return resError(res, 404, `Jobs have code ${+code_job} doesn't exists`);
+      return resError(res, 404, `Jobs have code ${job_id} doesn't exists`);
     }
 
     const dataComment = await this.prisma.comments.findMany({
       where: {
-        code_job: +code_job,
+        job_id: +job_id,
       },
     });
 
@@ -51,30 +50,30 @@ export class CommentService {
     res: Response,
     body: ICreateComment,
   ): Promise<any> {
-    const { code_job, user_id, content, star_comment } = body;
+    const { job_id, user_id, content, star_comment } = body;
     const email = req.user['email'];
 
-    const codeJobData = await this.prisma.jobs.findFirst({
+    const jobData = await this.prisma.jobs.findFirst({
       where: {
-        code_job,
+        id: +job_id,
       },
     });
 
-    if (!codeJobData) {
-      return resError(res, 404, `Jobs have code ${code_job} doesn't exists`);
+    if (!jobData) {
+      return resError(res, 404, `Jobs have code ${job_id} doesn't exists`);
     }
 
-    const reqUserData = await this.prisma.users.findFirst({
+    const userData = await this.prisma.users.findFirst({
       where: {
         id: user_id,
       },
     });
 
-    if (!reqUserData) {
+    if (!userData) {
       return resError(res, 404, `User have ID:${user_id} doesn't exists`);
     }
 
-    if (email !== reqUserData.email) {
+    if (email !== userData.email) {
       return resError(res, 400, `You cannot comment for others`);
     }
 
@@ -83,7 +82,7 @@ export class CommentService {
     }
 
     const newData = {
-      code_job,
+      job_id,
       user_id,
       date_comment: new Date(),
       content,

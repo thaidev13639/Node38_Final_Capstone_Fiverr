@@ -33,12 +33,12 @@ export class TypeJobService {
             select: {
               id: true,
               name_group_job: true,
-              code_group_job: true,
+              type_job_id: true,
               detail_group_job: {
                 select: {
                   id: true,
                   name_detail: true,
-                  code_detail_group: true,
+                  group_type_id: true,
                 },
               },
             },
@@ -60,6 +60,9 @@ export class TypeJobService {
     const detailType = await this.prisma.type_jobs.findFirst({
       where: {
         id: +id,
+      },
+      include: {
+        group_type_jobs: true,
       },
     });
 

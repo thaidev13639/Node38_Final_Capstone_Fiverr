@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { CommentModule } from './comment/comment.module';
 import { TypeJobModule } from './type-job/type-job.module';
 import { GroupTypeModule } from './group-type/group-type.module';
+import { DetailGroupModule } from './detail-group/detail-group.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GroupTypeModule } from './group-type/group-type.module';
     CommentModule,
     TypeJobModule,
     GroupTypeModule,
+    DetailGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

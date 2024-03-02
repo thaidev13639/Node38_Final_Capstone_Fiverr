@@ -140,18 +140,6 @@ export class UserService {
       return resError(res, 400, 'User can only update personal information');
     }
 
-    if (
-      userData.role === 'Admin' &&
-      req.user['email'] !== userData.email &&
-      body.role === 'User'
-    ) {
-      return resError(
-        res,
-        400,
-        "Admin cann't update role another Admin information",
-      );
-    }
-
     if (body.email !== userData.email) {
       return resError(res, 400, "Email Cann't Update");
     }
@@ -195,6 +183,7 @@ export class UserService {
     if (
       req.user['role'] === 'Admin' &&
       userData.role === 'Admin' &&
+      req.user['email'] === userData.email &&
       body.role === 'User'
     ) {
       return resError(res, 400, "Admin cann't set your Role to User");
@@ -211,7 +200,7 @@ export class UserService {
 
   async deleteUser(req: Request, res: Response, id: string): Promise<any> {
     if (isNaN(Number(id))) {
-      return resError(res, 400, 'user_id need number');
+      return resError(res, 400, 'user_id should be type number');
     }
     const userData = await this.prisma.users.findFirst({
       where: {
