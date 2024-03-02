@@ -9,6 +9,7 @@ import { CommentModule } from './comment/comment.module';
 import { TypeJobModule } from './type-job/type-job.module';
 import { GroupTypeModule } from './group-type/group-type.module';
 import { DetailGroupModule } from './detail-group/detail-group.module';
+import { JobModule } from './job/job.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DetailGroupModule } from './detail-group/detail-group.module';
     TypeJobModule,
     GroupTypeModule,
     DetailGroupModule,
+    JobModule,
   ],
   controllers: [AppController],
   providers: [AppService],

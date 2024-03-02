@@ -30,6 +30,7 @@ import { IUpdateGroupType } from './dto/updateGroupType.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { IUploadFileDto } from 'src/user/dto/uploadAvatar.dto';
+import { MyInterceptor } from 'src/interceptor/imgInterceptor';
 
 @ApiTags('Group-Type-Job')
 @Controller('group-type')
@@ -97,6 +98,7 @@ export class GroupTypeController {
 
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
+    MyInterceptor,
     FileInterceptor('file', {
       storage: diskStorage({
         destination: process.cwd() + '/public/image',

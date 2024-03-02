@@ -214,21 +214,6 @@ export class GroupTypeService {
     file: Express.Multer.File,
     id: string,
   ): Promise<any> {
-
-    if (id && isNaN(Number(id))) {
-      return resError(res, 400, 'id should be type Number');
-    }
-
-    const isGroupType = await this.prisma.group_type_jobs.findFirst({
-      where: {
-        id: +id,
-      },
-    });
-
-    if (!isGroupType) {
-      return resError(res, 404, `Group Type have ID: ${id} not exists`);
-    }
-
     try {
       await this.prisma.group_type_jobs.update({
         where: {
