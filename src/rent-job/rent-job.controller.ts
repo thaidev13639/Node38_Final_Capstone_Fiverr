@@ -65,7 +65,7 @@ export class RentJobController {
   @UseGuards(RoleGuards)
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Put('/update-rent-job/:id')
+  @Put('/complete-rent-job/:id')
   updateRentJob(@Param('id') id: string, @Res() res: Response): Promise<any> {
     return this.rentJobService.updateRentJob(res, id);
   }
