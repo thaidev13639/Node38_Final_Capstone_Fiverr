@@ -10,6 +10,7 @@ import { TypeJobModule } from './type-job/type-job.module';
 import { GroupTypeModule } from './group-type/group-type.module';
 import { DetailGroupModule } from './detail-group/detail-group.module';
 import { JobModule } from './job/job.module';
+import { RentJobModule } from './rent-job/rent-job.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JobModule } from './job/job.module';
     GroupTypeModule,
     DetailGroupModule,
     JobModule,
+    RentJobModule,
   ],
   controllers: [AppController],
   providers: [AppService],
